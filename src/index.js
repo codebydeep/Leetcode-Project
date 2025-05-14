@@ -7,13 +7,6 @@ dotenv.config({
 
 const PORT = process.env.PORT || 3000
 
-connectDataBase()
-.then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server is running on Port: ${PORT}`);
-    })
-})
-.catch((error) => {
-    console.log(`DataBase Connection Error`, error);
-    process.exit(1)    
+app.listen(PORT, () => {
+    console.log(`Server is running on Port: ${PORT}`);
 })
