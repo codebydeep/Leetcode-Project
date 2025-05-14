@@ -1,0 +1,19 @@
+import app from "./app.js"
+import dotenv from "dotenv"
+
+dotenv.config({
+    path: "./.env"
+})
+
+const PORT = process.env.PORT || 3000
+
+connectDataBase()
+.then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on Port: ${PORT}`);
+    })
+})
+.catch((error) => {
+    console.log(`DataBase Connection Error`, error);
+    process.exit(1)    
+})
