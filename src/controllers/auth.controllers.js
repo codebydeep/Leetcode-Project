@@ -1,4 +1,4 @@
-import db from "../db/db.js"
+import db from "../libs/db.js"
 import { UserRole } from "../generated/prisma/index.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { ApiError } from "../utils/api-error.js";
