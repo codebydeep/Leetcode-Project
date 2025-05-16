@@ -8,24 +8,17 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
         const token = req.cookies.jwt
 
         if(!token){
-            return res.status(401).json({
-                success: false,
-                message: "UnAuthorized - No token provided!"
-            })
+            throw new ApiError(404, "UnAuthorized - No token provided!")
         }
 
         let decoded;
 
-        try{
+        try {
             decoded = jwt.verify(token, process.env.JWT_SECRET);
-
         } catch (error) {
-            return res.status(401).json({
-                success: false,
-                message: "UnAuthorized - Invalid token"
-            })
+            throw new ApiError(401, "UnAuthorized - Invalid token");
         }
-
+        
         const user = await db.user.findUnique({
             where: {
                 id: decoded.id
