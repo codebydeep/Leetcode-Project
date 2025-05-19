@@ -87,19 +87,120 @@ const getAllProblems = asyncHandler(async(req, res) => {
 
 
 // get-Problem-By-Id controller -
-const getProblemById = asyncHandler(async(req, res) => {})
+const getProblemById = asyncHandler(async(req, res) => {
+    const {id} = req.params;
 
+    const problem = await db.problem.findUnique({
+        where: {
+            id,
+        }
+    })
+
+    if(!problem) throw new ApiError(404, "Problem not found")
+
+    res.status(200).json(
+        new ApiResponse(200, "Problem Fetched Successfully", {problem})
+    )    
+})
+    
 
 // update-Problem controller -
-const updateProblem = asyncHandler(async(req, res) => {})
+const updateProblem = asyncHandler(async(req, res) => {
+    const {problemId} = req.params;
 
+    const {
+        title,
+        description,
+        difficulty,
+        tags,
+        examples,
+        constraints,
+        testcases,
+        codeSnippets,
+        referenceSolution
+    } = req.body
+  
+    const problem = await db.problem.findFirst({
+        where: {
+            id: problemId,
+        }
+    })
+
+    if(!problem){
+        throw new ApiError(404, "No Problem Found")
+    }
+
+    const updatedProblem = await db.problem.update({
+        where: {
+            id: problemId,
+        },
+        data: {
+            title,
+            description,
+            difficulty,
+            tags,
+            examples,
+            constraints,
+            testcases,
+            codeSnippets,
+            referenceSolution
+        }
+    });
+
+    return res.status(200).json(
+        new ApiResponse(200, "Problem Update Successfully")
+    )
+})
 
 // delete-Problem controller - 
-const deleteProblem = asyncHandler(async(req, res) => {})
+const deleteProblem = asyncHandler(async(req, res) => {
+    const {id} = req.params;
+
+    const problem = await db.problem.findUnique({
+        where: {id}
+    })
+
+    if(!problem){
+        throw new ApiError(404, "Problem Not Found")
+    }
+
+    await db.problem.delete(
+        {
+            where: {
+                id
+            }
+        }
+    )
+
+    res.status(200).json(
+        new ApiResponse(200, "Problem Deleted Successfully")
+    )
+})
 
 
 // get-All-Problem-Solved-by-User controller -
-const getAllProblemsSolvedByUser = asyncHandler(async(req, res) => {})
+const getAllProblemsSolvedByUser = asyncHandler(async(req, res) => {
+    const problems = await db.problem.findMany({
+        where: {
+            solvedBy: {
+                some: {
+                    userId: req.userId,
+                }
+            }
+        },
+        include: {
+            solvedBy: {
+                where: {
+                    userId: req.user.id,
+                }
+            }
+        },
+    });
+
+    res.status(200).json(
+        new ApiResponse(200, "Problems Fetched Successfully!", {problems})
+    )
+})
 
 
 export {createProblem, getAllProblems, getProblemById, updateProblem, deleteProblem, getAllProblemsSolvedByUser}
