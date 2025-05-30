@@ -207,3 +207,16 @@ const getAllProblemsSolvedByUser = asyncHandler(async(req, res) => {
 
 
 export {createProblem, getAllProblems, getProblemById, updateProblem, deleteProblem, getAllProblemsSolvedByUser}
+
+
+
+
+
+
+
+
+
+// Problems in Controllers -
+// create-problem controller - esme Successfull show nahi ho rha h.
+// update-problem by Id - output me problem hai.
+// get solved Problems - esme bhi dikka thain.
