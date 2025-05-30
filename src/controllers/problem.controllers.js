@@ -3,6 +3,7 @@ import { getJudge0LanguageId, pollBatchResults, submitBatch } from "../libs/judg
 import { ApiError } from "../utils/api-error.js"
 import { ApiResponse } from "../utils/api-response.js"
 import { asyncHandler } from "../utils/async-handler.js"
+import dotenv from "dotenv"
 
 
 // create-Problem controller -
@@ -66,7 +67,7 @@ const createProblem = asyncHandler(async(req, res) => {
         })
 
         return res.status(201).json(
-            new ApiResponse(201, "Problem Created Successfully", {problem:newProblem})
+            new ApiResponse(201, "Problem Created Successfully", {newProblem})
         )
 
 });
@@ -96,7 +97,9 @@ const getProblemById = asyncHandler(async(req, res) => {
         }
     })
 
-    if(!problem) throw new ApiError(404, "Problem not found")
+    if(!problem) {
+        throw new ApiError(404, "Problem not found")
+    }
 
     res.status(200).json(
         new ApiResponse(200, "Problem Fetched Successfully", {problem})
@@ -148,7 +151,7 @@ const updateProblem = asyncHandler(async(req, res) => {
     });
 
     return res.status(200).json(
-        new ApiResponse(200, "Problem Update Successfully")
+        new ApiResponse(200, "Problem Update Successfully", updateProblem)
     )
 })
 
@@ -184,7 +187,7 @@ const getAllProblemsSolvedByUser = asyncHandler(async(req, res) => {
         where: {
             solvedBy: {
                 some: {
-                    userId: req.userId,
+                    userId: req.user.id,
                 }
             }
         },
