@@ -35,9 +35,8 @@ model User {
   submission      Submission[]
 
   ProblemSolved ProblemSolved[]
+  playlists     Playlist[]
 }
-
-
 
 
 enum Difficulty {
@@ -69,8 +68,8 @@ model Problem {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   submission Submission[]
-
   solvedBy ProblemSolved[]
+  problemsPlaylists ProblemInPlaylist[]
 }
 
 
@@ -84,7 +83,7 @@ model Submission {
   stdin String?
   stdout String?
   stderr String?
-  compileOutput String?
+  compiledOutput String?
   status String
   memory String?
   time String?
@@ -135,4 +134,38 @@ model ProblemSolved {
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@index([userId, problemId])
+}
+
+
+// Playlist model -
+model Playlist {
+  id String @id @default(uuid())
+  name String
+  description String?
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  problems ProblemInPlaylist[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([name, userId]) 
+}
+
+
+// Problem-In-Playlist model -
+model ProblemInPlaylist {
+  id String @id @default(uuid())
+  playListId String
+  problemId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  playlist Playlist @relation(fields: [playListId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([playListId, problemId])
 }
