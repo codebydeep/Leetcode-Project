@@ -12,6 +12,6 @@ app.use(cookieParser())
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/problems", problemRoutes)
-app.use("api/v1/execute-code", executionRoutes)
+app.use("/api/v1/execute-code", executionRoutes)
 
 export default app

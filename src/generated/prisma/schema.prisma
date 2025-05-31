@@ -71,18 +71,18 @@ model Problem {
 
 // Submission model -
 model Submission {
-  id             String  @id @default(uuid())
-  userId         String
-  problemId      String
-  sourceCode     Json
-  language       String
-  stdin          String?
-  stdout         String?
-  stderr         String?
-  compiledOutput String?
-  status         String
-  memory         String?
-  time           String?
+  id            String  @id @default(uuid())
+  userId        String
+  problemId     String
+  sourceCode    Json
+  language      String
+  stdin         String?
+  stdout        String?
+  stderr        String?
+  compileOutput String?
+  status        String
+  memory        String?
+  time          String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

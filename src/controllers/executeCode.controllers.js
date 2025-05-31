@@ -1,4 +1,4 @@
-import { pollBatchResults, submitBatch } from "../libs/judge0.libs.js"
+import { pollBatchResults, submitBatch, getLanguageName } from "../libs/judge0.libs.js"
 import { ApiResponse } from "../utils/api-response.js"
 import { asyncHandler } from "../utils/async-handler.js"
 import db from "../libs/db.js"
@@ -147,4 +147,4 @@ const executeCode = asyncHandler(async(req, res) => {
 })
 
 
-export default executeCode
+export { executeCode }
