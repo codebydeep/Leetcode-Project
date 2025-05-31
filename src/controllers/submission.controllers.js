@@ -16,4 +16,23 @@ const getAllSubmission = asyncHandler(async(req, res) => {
     )
 })
 
-export {getAllSubmission}
+
+const getSubmissionsForProblem = asyncHandler(async(req, res) => {
+    const userId = req.user.id
+    const problemId = req.params.problemId
+
+    const submissions = await db.submission.findMany({
+        where: {
+            userId: userId,
+            problemId: problemId,
+        }
+    })
+
+    res.status(200).json(
+        new ApiResponse(200, "Submissions fetched Successfully", {submissions},true)
+    )
+})
+
+
+
+export {getAllSubmission, getSubmissionsForProblem}
