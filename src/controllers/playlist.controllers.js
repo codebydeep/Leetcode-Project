@@ -35,5 +35,51 @@ const createPlaylist = asyncHandler(async(req, res) => {
 })
 
 
+const getAllListDetails = asyncHandler(async(req, res) => {
+    const playlists = await db.playlist.findMany({
+        where: {
+            userId: req.user.id 
+        },
+        include: {
+            problems: {
+                include: {
+                    problem: true
+                }
+            }
+        }
+    })
 
-export {createPlaylist}
+    res.status(200).json(
+        new ApiResponse(200, "Playlists fetched Successfully", playlists, true)
+    )
+})
+
+
+const getPlaylistDetails = asyncHandler(async(req, res) => {
+    const {playlistId} = req.params
+
+    const playlist = await db.playlist.findUnique({
+        where: {
+            id: playlistId,
+            userId: req.user.id
+        },
+        include: {
+            problems: {
+                include: {
+                    problem: true
+                }
+            }
+        }
+    })
+
+    if(!playlist){
+        return res.status(404).json(
+            new ApiResponse(404, "Playlist not found", false)
+        )
+    }
+
+    res.status(200).json(
+        new ApiResponse(200, "Playlist fetched Successfully", playlist, true)
+    )
+})
+export {createPlaylist, getAllListDetails, getPlaylistDetails}
