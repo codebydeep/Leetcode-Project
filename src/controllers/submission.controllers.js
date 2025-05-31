@@ -34,5 +34,19 @@ const getSubmissionsForProblem = asyncHandler(async(req, res) => {
 })
 
 
+const getAllTheSubmissionsForProblem = asyncHandler(async(req, res) => {
+    const problemId = req.params.problemId
+    
+    const submission = await db.submission.count({
+        where: {
+            problemId: problemId
+        }
+    });
+     
+    res.status(200).json(
+        new ApiResponse(200, "All Submissions fetched Successfully", {count: submission},true)
+    )
+})
 
-export {getAllSubmission, getSubmissionsForProblem}
+
+export {getAllSubmission, getSubmissionsForProblem, getAllTheSubmissionsForProblem}
