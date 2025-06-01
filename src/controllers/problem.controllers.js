@@ -8,8 +8,18 @@ import dotenv from "dotenv"
 
 // create-Problem controller -
 const createProblem = asyncHandler(async(req, res) => {
-    const {title, description, difficulty, tags, examples, constraints, testcases, codeSnippets, referenceSolution} = req.body
-    
+    const {
+        title, 
+        description, 
+        difficulty, 
+        tags, 
+        examples, 
+        constraints, 
+        testcases, 
+        codeSnippets, 
+        referenceSolution
+    } = req.body
+        
     if(req.user.role !== "ADMIN"){
         throw new ApiError(404, "You are not allowed to create a problem")
     }

@@ -82,4 +82,71 @@ const getPlaylistDetails = asyncHandler(async(req, res) => {
         new ApiResponse(200, "Playlist fetched Successfully", playlist, true)
     )
 })
-export {createPlaylist, getAllListDetails, getPlaylistDetails}
+
+
+// error -
+const addProblemToPlaylist = asyncHandler(async(req, res) => {
+    const {playlistId} = req.params
+    const {problemIds} = req.body
+
+    if(!Array.isArray(problemIds) || problemIds.length === 0){
+        return res.status(400).json(
+            new ApiResponse(400, "Invalid or Missing ProblemsId", false)
+        )
+    }
+
+    const problemsInPlaylists = await db.problemInPlaylist.createMany({
+        data: problemIds.map((problemId) => ({
+            problemId,
+            playlistId: playlistId,
+        }))
+    })
+
+    res.status(201).json(
+        new ApiResponse(201, "Problem Added to Playlist Successfully", problemsInPlaylists, true)
+    )
+})
+
+
+const deletePlaylist = asyncHandler(async(req, res) => {
+    const {playlistId} = req.params
+
+    const deletePlaylist = await db.playlist.delete({
+        where: {
+            id: playlistId
+        }
+    })
+
+    res.status(200).json(
+        new ApiResponse(200, "Playlist deleted Successfully", deletePlaylist, true)
+    )
+})
+
+
+// error -
+const removeProblemFromPlaylist = asyncHandler(async(req, res) => {
+    const {playlistId} = req.params
+    const {problemIds} = req.body
+
+    if(!Array.isArray(problemIds) || problemIds.length === 0){
+        return res.status(400).json(
+            new ApiResponse(400, "Invalid or Missing ProblemsId", false)
+        )
+    }
+    
+    const deletedProblem = await db.problemsInPlaylist.deleteMany({
+        where: {
+            playlistId,
+            problemId: {
+                in: problemIds
+            }
+        }
+    })
+    
+    res.status(200).json(
+        new ApiResponse(200, "Problem deleted from Playlist Done!", deletedProblem, true)
+    )
+})
+
+
+export {createPlaylist, getAllListDetails, getPlaylistDetails, addProblemToPlaylist, deletePlaylist, removeProblemFromPlaylist}

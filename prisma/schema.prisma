@@ -60,7 +60,7 @@ model Problem {
 
   testcases       Json
   codeSnippets    Json
-  referenceSolution Json
+  referenceSolution Json //
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -83,7 +83,7 @@ model Submission {
   stdin String?
   stdout String?
   stderr String?
-  compiledOutput String?
+  compiledOutput String? // d -> x
   status String
   memory String?
   time String?
@@ -107,7 +107,7 @@ model TestCaseResult {
   stdout String?
   expected String
   stderr String?
-  compiledOutput String?
+  compiledOutput String? //
   status String?
   memory String?
   time String?
@@ -133,7 +133,7 @@ model ProblemSolved {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  @@index([userId, problemId])
+  @@unique([userId, problemId])
 }
 
 
